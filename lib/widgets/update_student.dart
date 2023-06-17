@@ -20,7 +20,6 @@ class UpdateStudent extends StatefulWidget {
 }
 
 class _UpdateStudentState extends State<UpdateStudent> {
-  
   late TextEditingController _idController;
   late TextEditingController _nameController;
   late TextEditingController _ageController;
@@ -62,7 +61,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
     if (_name.isEmpty || _age.isEmpty || _number.isEmpty) {
       return;
     }
-  
+
     final _students = StudentModel(
       name: _name,
       age: _age,
@@ -213,7 +212,6 @@ class _UpdateStudentState extends State<UpdateStudent> {
   Widget szdBox = const SizedBox(height: 20);
 
   Future<void> keyBoard(keyboard) async {
-    keyboardType:
     TextInputType.number;
   }
 

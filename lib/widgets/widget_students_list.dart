@@ -26,10 +26,12 @@ class _ListStudentWidgetState extends State<ListStudentWidget> {
     super.initState();
 
     studentBox = Hive.box('student_db1');
+    getAllStudents();
   }
 
   @override
   Widget build(BuildContext context) {
+    getAllStudents();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -39,7 +41,7 @@ class _ListStudentWidgetState extends State<ListStudentWidget> {
           IconButton(
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (ctx) => SearchScreen(),
+                  builder: (ctx) => const SearchScreen(),
                 ));
               },
               icon: const Icon(Icons.search))
@@ -129,6 +131,7 @@ class _ListStudentWidgetState extends State<ListStudentWidget> {
   }
 
   deleteStudentAlert(BuildContext context, index) {
+    getAllStudents();
     showDialog(
       context: context,
       builder: ((ctx) => AlertDialog(

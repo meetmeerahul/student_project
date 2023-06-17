@@ -4,21 +4,20 @@ import 'package:flutter/material.dart';
 
 import 'package:student_project/db/models/student_model.dart';
 import 'package:student_project/widgets/mainscreen.dart';
-import 'package:student_project/widgets/update_student.dart';
 
 class StudentView extends StatelessWidget {
   final double coverHeight = 200;
   final double profileHeight = 160;
   final double coverWidth = 500;
 
-  StudentView({
+  final StudentModel passValue;
+  final int passId;
+
+  const StudentView({
     Key? key,
     required this.passValue,
     required this.passId,
   }) : super(key: key);
-
-  StudentModel passValue;
-  final int passId;
 
   //Widgets Used for displaying student list
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:student_project/db/models/student_model.dart';
 import 'package:student_project/widgets/mainscreen.dart';
-import 'package:student_project/widgets/student_home.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
