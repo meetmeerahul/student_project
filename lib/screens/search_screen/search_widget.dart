@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:student_project/db/models/student_model.dart';
-import 'package:student_project/widgets/widget_view_student.dart';
+import 'package:student_project/screens/student_details/widget_view_student.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});

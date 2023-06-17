@@ -70,7 +70,6 @@ class _UpdateStudentState extends State<UpdateStudent> {
     );
     final studentDataB = await Hive.openBox<StudentModel>('student_db1');
     studentDataB.putAt(index, _students);
-    getAllStudents();
   }
 
   Future<void> takePhoto() async {
@@ -90,7 +89,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
         StudentAddBtn(widget.index);
 
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (ctx) => const ListStudentWidget()),
+            MaterialPageRoute(builder: (ctx) => const MainScreen()),
             (route) => false);
       },
       icon: const Icon(Icons.update_rounded),
@@ -222,7 +221,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_circle_left_sharp),
+          icon: const Icon(Icons.arrow_left),
           onPressed: () => Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (ctx) => const MainScreen()),
               (route) => false),

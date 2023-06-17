@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:student_project/db/functions/db_functions.dart';
 import 'package:student_project/db/models/student_model.dart';
-import 'package:student_project/widgets/search_widget.dart';
+import 'package:student_project/screens/search_screen/search_widget.dart';
 import 'package:student_project/widgets/update_student.dart';
-import 'package:student_project/widgets/widget_students_add.dart';
-import 'package:student_project/widgets/widget_view_student.dart';
+import 'package:student_project/screens/add_student/widget_students_add.dart';
+import 'package:student_project/screens/student_details/widget_view_student.dart';
 
 class ListStudentWidget extends StatefulWidget {
   const ListStudentWidget({super.key});
@@ -24,14 +24,11 @@ class _ListStudentWidgetState extends State<ListStudentWidget> {
   @override
   void initState() {
     super.initState();
-
     studentBox = Hive.box('student_db1');
-    getAllStudents();
   }
 
   @override
   Widget build(BuildContext context) {
-    getAllStudents();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
