@@ -1,28 +1,28 @@
+// ignore: must_be_immutable
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-
 import 'package:student_project/db/models/student_model.dart';
-import 'package:student_project/widgets/mainscreen.dart';
 
-class StudentView extends StatelessWidget {
+// ignore: must_be_immutable
+class Details extends StatelessWidget {
   final double coverHeight = 200;
   final double profileHeight = 160;
   final double coverWidth = 500;
 
-  final StudentModel passValue;
-  final int passId;
-
-  const StudentView({
+  Details({
     Key? key,
     required this.passValue,
     required this.passId,
   }) : super(key: key);
 
+  StudentModel passValue;
+  final int passId;
+
   //Widgets Used for displaying student list
 
   Widget content() {
-    return Container(
+    return SizedBox(
       width: 200,
       height: 100,
       child: Column(
@@ -30,7 +30,7 @@ class StudentView extends StatelessWidget {
         children: [
           Text(
             ' ${passValue.name}',
-            style: const TextStyle(fontSize: 28, fontFamily: 'Ubuntu'),
+            style: const TextStyle(fontSize: 28),
           ),
           Text('Age : ${passValue.age}',
               style: const TextStyle(fontSize: 18, color: Colors.grey)),
@@ -42,18 +42,19 @@ class StudentView extends StatelessWidget {
   }
 
   Widget top() {
-    final top = (coverHeight - profileHeight / 2) + 40;
+    final top = coverHeight - profileHeight / 2.5;
     final bottom = profileHeight / 2;
     return Stack(clipBehavior: Clip.none, children: [
       Container(margin: EdgeInsets.only(bottom: bottom), child: CoverImage()),
       Positioned(
         top: top,
-        left: 115,
+        left: 10,
         child: ProfileImage(),
       ),
     ]);
   }
 
+  // ignore: non_constant_identifier_names
   Widget CoverImage() => Container(
         //color: const Color.fromRGBO(234, 236, 238, 2),
 
@@ -69,18 +70,13 @@ class StudentView extends StatelessWidget {
   // ignore: non_constant_identifier_names
   Widget ProfileImage() => CircleAvatar(
         backgroundImage: FileImage(File(passValue.image)),
-        radius: profileHeight / 2,
+        radius: profileHeight / 3,
       );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-            icon: const Icon(Icons.arrow_circle_left_sharp),
-            onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (ctx) => const MainScreen()),
-                (route) => false)),
         title: const Text('Profile'),
         centerTitle: true,
       ),
