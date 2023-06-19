@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:student_project/bloc/add_student/bloc/add_image_bloc.dart';
 import 'package:student_project/bloc/update_image/bloc/update_image_bloc.dart';
 import 'package:student_project/db/functions/db_functions.dart';
 import 'package:student_project/db/models/student_model.dart';
 import 'package:student_project/screens/view_student.dart';
 
-String tempimg = '';
+String tempimg = "";
 
 // ignore: must_be_immutable
 class UpdateStudent extends StatefulWidget {
@@ -37,50 +38,99 @@ class _UpdateStudentState extends State<UpdateStudent> {
     final name = _nameController.text.trim();
     final age = _ageController.text.trim();
     final number = _numController.text.trim();
+
     final _students = StudentModel(
-      name: name,
-      age: age,
-      num: number,
-      image: imagePath ?? widget.passValue.image,
-    );
+        name: name,
+        age: age,
+        num: number,
+        // image: imagePath ?? widget.passValue.image,
+        image: tempimg);
+
     final studentDB = await Hive.openBox<StudentModel>('Student_db');
     studentDB.putAt(index, _students);
+
     getAllStudents();
   }
 
   Widget elavatedbtn() {
     return ElevatedButton.icon(
       onPressed: () {
-        StudentAddBtn(widget.index);
+        final _name = _nameController.text.trim();
+        final _age = _ageController.text.trim();
+        final _mobile = _numController.text.trim();
 
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (ctx) => const ListStudents()),
-            (route) => false);
+        if (_name.isEmpty || _age.isEmpty || _mobile.isEmpty) {
+          showSnackBar(context);
+        } else {
+          StudentAddBtn(widget.index);
+
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (ctx) => const ListStudents()),
+              (route) => false);
+        }
       },
-      icon: Icon(Icons.update_rounded),
-      label: Text('Update'),
+      icon: const Icon(Icons.update_rounded),
+      label: const Text('Update'),
     );
   }
 
   Widget textFieldName({
     required TextEditingController myController,
   }) {
-    return TextFormField(
-      autofocus: false,
-      controller: myController,
-      cursorColor: Colors.black,
-      style: TextStyle(color: Colors.black),
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Color.fromRGBO(234, 236, 238, 2),
-        border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(50)),
-        // hintText: hintName,
-        // counterText: myController.text
-      ),
-      // initialValue: 'hintName',
-    );
+    if (myController == _ageController) {
+      return TextFormField(
+        autofocus: false,
+        controller: myController,
+        cursorColor: Colors.black,
+        keyboardType: TextInputType.number,
+        maxLength: 2,
+        style: TextStyle(color: Colors.black),
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(width: 3, color: Colors.orange),
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          // hintText: hintName,
+          // counterText: myController.text
+        ),
+        // initialValue: 'hintName',
+      );
+    } else if (myController == _numController) {
+      return TextFormField(
+        autofocus: false,
+        keyboardType: TextInputType.number,
+        controller: myController,
+        cursorColor: Colors.black,
+        maxLength: 10,
+        style: TextStyle(color: Colors.black),
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(width: 3, color: Colors.orange),
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          // hintText: hintName,
+          // counterText: myController.text
+        ),
+        // initialValue: 'hintName',
+      );
+    } else {
+      return TextFormField(
+        autofocus: false,
+
+        controller: myController,
+        cursorColor: Colors.black,
+        style: TextStyle(color: Colors.black),
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderSide: const BorderSide(width: 3, color: Colors.orange),
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          // hintText: hintName,
+          // counterText: myController.text
+        ),
+        // initialValue: 'hintName',
+      );
+    }
   }
 
   Widget dpImage() {
@@ -88,19 +138,20 @@ class _UpdateStudentState extends State<UpdateStudent> {
       children: [
         BlocBuilder<UpdateImageBloc, UpdateImageState>(
           builder: (context, state) {
-            tempimg =
-                (tempimg != widget.passValue.image ? state.image : tempimg)!;
+            // tempimg =
+            //     (tempimg != widget.passValue.image ? state.image : tempimg)!;
             return CircleAvatar(
               radius: 75,
-              backgroundImage: imagePath == null
-                  ? FileImage(File(widget.passValue.image))
-                  : FileImage(File(imagePath!)),
+              backgroundImage: FileImage(File(state.image!)),
+              // backgroundImage: imagePath == null
+              //     ? FileImage(File(widget.passValue.image))
+              //     : FileImage(File(imagePath!)),
             );
           },
         ),
         Positioned(
-          bottom: 2,
-          right: 10,
+          bottom: 0,
+          right: 0,
           child: InkWell(
             child: const Icon(
               Icons.add_a_photo_rounded,
@@ -119,6 +170,9 @@ class _UpdateStudentState extends State<UpdateStudent> {
 
   @override
   Widget build(BuildContext context) {
+    context
+        .read<UpdateImageBloc>()
+        .add(UpdatedImage(imagePath: widget.passValue.image));
     return Scaffold(
         appBar: AppBar(
           title: const Text('Edit'),
@@ -145,9 +199,34 @@ class _UpdateStudentState extends State<UpdateStudent> {
     final PickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (PickedFile != null) {
-      var tempimg = PickedFile.path;
+      tempimg = PickedFile.path;
       BlocProvider.of<UpdateImageBloc>(context)
           .add(UpdatedImage(imagePath: tempimg));
     }
+  }
+
+  showSnackBar(BuildContext context) {
+    var _errMsg = "";
+
+    if (_nameController.text.isEmpty &&
+        _ageController.text.isEmpty &&
+        _numController.text.isEmpty) {
+      _errMsg = "Please Insert Valid Data In All Fields ";
+    } else if (_nameController.text.isEmpty) {
+      _errMsg = "Name  Must Be Filled";
+    } else if (_ageController.text.isEmpty) {
+      _errMsg = "Age  Must Be Filled";
+    } else if (_numController.text.isEmpty) {
+      _errMsg = "Phone Number Must Be Filled";
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.red,
+        margin: const EdgeInsets.all(10.0),
+        content: Text(_errMsg),
+      ),
+    );
   }
 }

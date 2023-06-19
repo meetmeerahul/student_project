@@ -24,6 +24,7 @@ class AddStudent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<AddImageBloc>().add(AddImage(imagepath: ''));
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Student'),
@@ -35,32 +36,38 @@ class AddStudent extends StatelessWidget {
               const SizedBox(
                 height: 50,
               ),
-              BlocBuilder<AddImageBloc, AddImageState>(
-                builder: (context, state) {
-                  imagepath = state.image;
-                  return Stack(children: [
-                    CircleAvatar(
-                      backgroundImage: imagepath == null
+              // BlocBuilder<AddImageBloc, AddImageState>(
+              //   builder: (context, state) {
+              //  imagepath = state.image;
+              // return
+              Stack(children: [
+                BlocBuilder<AddImageBloc, AddImageState>(
+                  builder: (context, state) {
+                    imagepath = state.image;
+                    return CircleAvatar(
+                      backgroundImage: state.image.isEmpty
                           ? const AssetImage('assets/1.jpg') as ImageProvider
                           : FileImage(File(imagepath!)),
                       radius: 75,
+                    );
+                  },
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: InkWell(
+                    child: const Icon(
+                      Icons.add_a_photo_rounded,
+                      size: 30,
                     ),
-                    Positioned(
-                      bottom: 15,
-                      right: 16,
-                      child: InkWell(
-                        child: const Icon(
-                          Icons.add_a_photo_sharp,
-                          size: 30,
-                        ),
-                        onTap: () {
-                          takePhoto(context);
-                        },
-                      ),
-                    ),
-                  ]);
-                },
-              ),
+                    onTap: () {
+                      takePhoto(context);
+                    },
+                  ),
+                ),
+              ]),
+
+              // ),
               Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: TextFormField(

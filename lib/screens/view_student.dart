@@ -37,48 +37,52 @@ class ListStudents extends StatelessWidget {
           body: ListView.separated(
             itemBuilder: (ctx, index) {
               var data = state.studentList[index];
-              return ListTile(
-                leading: CircleAvatar(
-                  radius: 25,
-                  // backgroundColor: Colors.green,
-                  backgroundImage: FileImage(File(data.image)),
-                ),
-                title: Text(data.name),
-                trailing: Wrap(
-                  spacing: 12,
-                  children: <Widget>[
-                    IconButton(
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    radius: 25,
+                    // backgroundColor: Colors.green,
+                    backgroundImage: FileImage(File(data.image)),
+                  ),
+                  title: Text(data.name),
+                  trailing: Wrap(
+                    spacing: 12,
+                    children: <Widget>[
+                      IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => UpdateStudent(
+                                    index: index, passValue: data),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.edit),
+                          color: Colors.blue),
+                      IconButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  UpdateStudent(index: index, passValue: data),
-                            ),
-                          );
+                          deleteAlert(
+                              context: context, data: data, index: index);
                         },
-                        icon: const Icon(Icons.edit),
-                        color: Colors.blue),
-                    IconButton(
-                      onPressed: () {
-                        deleteAlert(context: context, data: data, key: index);
-                      },
-                      icon: const Icon(Icons.delete),
-                      color: Colors.red,
-                    ),
-                  ],
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (ctx) => Details(
-                        passId: index,
-                        passValue: data,
+                        icon: const Icon(Icons.delete),
+                        color: Colors.red,
                       ),
-                    ),
-                  );
-                },
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (ctx) => Details(
+                          passId: index,
+                          passValue: data,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               );
             },
             separatorBuilder: (context, index) {
@@ -98,7 +102,7 @@ class ListStudents extends StatelessWidget {
     );
   }
 
-  deleteAlert({required context, required key, required StudentModel data}) {
+  deleteAlert({required context, required index, required StudentModel data}) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -106,7 +110,7 @@ class ListStudents extends StatelessWidget {
         actions: [
           TextButton(
               onPressed: () {
-                deleteStudent(key, context);
+                deleteStudent(index, context);
                 Navigator.of(context).pop(ctx);
               },
               child: const Text(

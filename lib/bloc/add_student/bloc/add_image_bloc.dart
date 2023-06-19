@@ -9,7 +9,7 @@ class AddImageBloc extends Bloc<AddImageEvent, AddImageState> {
     on<AddImage>(
       (event, emit) {
         // TODO: implement event handler
-        return emit(AddImageState(image: event.imagepath));
+        return emit(AddImageState(image: event.imagepath!));
       },
     );
   }
