@@ -19,9 +19,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     });
     on<UpdateStudents>((event, emit) {
       listStudents.removeAt(event.stdId);
-      // listStudents.add(event.newList);
+
       listStudents.insert(event.stdId, event.newList);
-      // listStudents.ad(event.stdId);
     });
   }
 }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:student_project/bloc/add_student/bloc/add_image_bloc.dart';
+
 import 'package:student_project/bloc/update_image/bloc/update_image_bloc.dart';
 import 'package:student_project/db/functions/db_functions.dart';
 import 'package:student_project/db/models/student_model.dart';
